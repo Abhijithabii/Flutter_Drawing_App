@@ -73,6 +73,7 @@ class _DrawscreenState extends State<Drawscreen> {
       ),
       color: Colors.grey[200],
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Undo Button
           IconButton(
@@ -85,6 +86,7 @@ class _DrawscreenState extends State<Drawscreen> {
                   : null,
               icon: const Icon(Icons.undo)),
           // Redo Button
+
           IconButton(
               onPressed: _redostrokes.isNotEmpty
                   ? () {
@@ -94,7 +96,63 @@ class _DrawscreenState extends State<Drawscreen> {
                     }
                   : null,
               icon: const Icon(Icons.redo)),
+
+          // Brush Size Dropdown Button
+          DropdownButton(
+            value: _brushSize,
+            items: const [
+              DropdownMenuItem(
+                value: 2.0,
+                child: Text('Small'),
+              ),
+              DropdownMenuItem(
+                value: 4.0,
+                child: Text('Medium'),
+              ),
+              DropdownMenuItem(
+                value: 8.0,
+                child: Text('Large'),
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                _brushSize = value!;
+              });
+            },
+          ),
+          // Color Picker
+          Row(
+            children: [
+              _buildColorButton(Colors.black),
+              _buildColorButton(Colors.red),
+              _buildColorButton(Colors.blue),
+              _buildColorButton(Colors.green),
+            ],
+          )
         ],
+      ),
+    );
+  }
+
+  Widget _buildColorButton(Color color) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedColor = color;
+        });
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: _selectedColor == color ? Colors.grey : Colors.transparent,
+            width: 2,
+          ),
+        ),
       ),
     );
   }
